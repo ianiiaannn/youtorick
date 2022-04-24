@@ -25,6 +25,9 @@
   let v = urlParams.get('v');
   let d = urlParams.get('d');
   if (d === undefined) d = 'dQw4w9WgXcQ';
+  if (d === null) d = 'dQw4w9WgXcQ';
+  if (d === '') d = 'dQw4w9WgXcQ';
+  if (!d.match(/^[A-Za-z0-9_-]{10,12}$/)) d = 'dQw4w9WgXcQ';
   fetch(`https://youtube.com/oembed?url=http://www.youtube.com/watch?v=${v}&format=json`)
     .then(response => response.json())
     .then(data => {
