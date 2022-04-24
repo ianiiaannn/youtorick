@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+</head>
+<script>
+  // https://stackoverflow.com/questions/68033547/add-a-meta-tag-in-react-page-with-vanila-javascript
+  const metaAdder = (queryProperty, value) => {
+  // Get an element if it exists already
+  let element = document.querySelector(`meta[${queryProperty}]`);
+
+  // Check if the element exists
+  if (element) {
+    // If it does just change the content of the element
+    element.setAttribute("content", value);
+  } else {
+    // It doesn't exist so lets make a HTML element string with the info we want
+    element = `<meta ${queryProperty} content="${value}" />`;
+
+    // And insert it into the head
+    document.head.insertAdjacentHTML("beforeend", element);
+  }
+};
+  const urlParams = new URLSearchParams(window.location.search);
+  let v = urlParams.get('v');
+  let d = urlParams.get('d');
+  fetch(`https://youtube.com/oembed?url=http://www.youtube.com/watch?v=${v}&format=json`)
+    .then(response => response.json())
+    .then(data => {
+      console.log(data);
+      metaAdder('property="og:title"', data.title);
+      metaAdder('property="og:url"', `https://youtube.com/watch?v=${v}`);
+      metaAdder('property="og:site_name"', 'YouTube');
+      metaAdder('property="og:image"', data.thumbnail_url);
+      metaAdder('property="og:image:width"', data.thumbnail_width);
+      metaAdder('property="og:image:height"', data.thumbnail_height);
+      metaAdder('property="og:video:url"', `https://www.youtube.com/embed/${v}`);
+      metaAdder('property="og:video:secure_url"', `https://www.youtube.com/embed/${v}`);
+      metaAdder('property="og:video:type"', 'video.other');
+      metaAdder('property="og:video:width"', data.width);
+      metaAdder('property="og:video:height"', data.height);
+    })
+    .catch(err => { window.location = '/' });
+</script>
+<script>
+    // window.location='https://www.youtube.com/watch?v=dQw4w9WgXcQ'
+</script>
+
+</html>
